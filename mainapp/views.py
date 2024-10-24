@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse
 
 
 def index(request):
-    return HttpResponse('Это главная!')
+    return render (request, "mainapp/main.html")
 
 def about_me(request):
-    return HttpResponse('Это про меня')
+    return render (request, "mainapp/about_me.html")
