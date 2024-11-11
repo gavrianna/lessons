@@ -23,11 +23,17 @@
         </div>
     {% endfor %}
 
-    <form action="a">
-        <input type="text" name='name'>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{creation_form}}
         <button type="submit">Подтвердить</button>
     </form>
 
+    <form action="" method="post">
+        {% csrf_token %}
+        {{edit_form}}   
+        <button type="submit">Изменить</button>
+    </form>
 
 </body>
 

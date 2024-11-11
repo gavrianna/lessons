@@ -3,19 +3,33 @@ from tasktracker.models import Task, Status
 from tasktracker.forms import UserLoginForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
+from tasktracker.forms import TasksCreationForm
+from tasktracker.forms import TasksEditForm 
 
 @login_required
 def indextasks (request):
-    print(request.user)
-    tasks = Task.objects.filter(user = request.user).order_by('due_datetime')
-    context = {'tasks': tasks}
-    return render (request, "tasktracker/indextasks.html", context)
+    if request.method == 'GET':
+        print(request.user)
+        tasks = Task.objects.filter(user = request.user).order_by('due_datetime')
+        creation_form = TasksCreationForm ()
+        edit_form = TasksEditForm ()
+        context = {'tasks': tasks, 'creation_form': creation_form, "edit_form": edit_form}
+        return render (request, "tasktracker/indextasks.html", context)
+    else:
+        creation_form = TasksCreationForm(data=request.POST)
+        if creation_form.is_valid():
+            task = creation_form.save(commit=False)
+            task.user = request.user
+            task.status_id = 1
+            task.save()
+        return HttpResponseRedirect('/tasks')
 
 
 def login_view(request):
     print(request.user)
     if request.method == 'GET':
         login_form = UserLoginForm()
+
         context = {'login_form': login_form}
         return render (request, "tasktracker/login_page.html", context)
     else:
