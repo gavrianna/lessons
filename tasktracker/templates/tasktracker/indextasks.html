@@ -22,6 +22,12 @@
         transform: scale(1.1);
         color:rgb(249, 250, 252);
     }
+    .done{
+        color:rgb(150, 150, 150);
+    }
+    .done:hover{
+        background-color: rgb(177, 199, 177);
+    }
 </style>
 
 <body>
@@ -35,7 +41,7 @@
         <!-- Здесь будут выведены все задачи -->
         <div class="list-group">
             {% for task in tasks %}
-            <div class="task list-group-item list-group-item-action p-3 mb-3" id="{{task.id}}">
+            <div class="task list-group-item list-group-item-action p-3 mb-3 {% if task.status.id == 2 %}done{% endif %}" id="{{task.id}}">
                 <h3>{{task.title}}</h3>
                 <p>{{task.description}}</p>
                 <p>{{task.due_datetime}}</p>
@@ -72,8 +78,8 @@
                 </div>
                 <div class="modal-body">
                     <form action="edit_task_view" method="post">
-                        <input type="hidden" id="edit_task_id">
                         {% csrf_token %}
+                        <input type="hidden" id="edit_task_id" name="edit_task_id">
                         {{edit_form}}
                         <button type="submit">Изменить</button>
                     </form>

@@ -84,3 +84,11 @@ def get_task_info(request, task_id):
     # нужно отдать json
 
     return JsonResponse(task_json)
+
+def edit_task_view(request):
+    task_id = request.POST.get('edit_task_id')
+    task = Task.objects.get(id=task_id, user=request.user)
+    form_edit = TasksEditForm(request.POST, instance=task)
+    if form_edit.is_valid():
+        form_edit.save()
+        return HttpResponseRedirect('/tasks')
