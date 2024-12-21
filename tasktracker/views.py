@@ -1,4 +1,5 @@
 from django.shortcuts import render, HttpResponseRedirect, HttpResponse
+from django.http import JsonResponse
 from tasktracker.models import Task, Status
 from tasktracker.forms import UserLoginForm, UserRegistrationForm
 from django.contrib.auth.decorators import login_required
@@ -69,3 +70,17 @@ def logout_view(request):
 
 def teams_view(request):
     return render (request, "tasktracker/teams.html")
+
+def get_task_info(request, task_id):
+    
+    task = Task.objects.get(id = task_id)
+    task_json = {
+        "task_id": task.id,
+        "title": task.title,
+        "description": task.description,
+        "due_datetime": task.due_datetime.strftime('%Y-%m-%d %H:%M'),
+        "status_id": task.status.id
+    }
+    # нужно отдать json
+
+    return JsonResponse(task_json)
